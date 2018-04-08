@@ -1,19 +1,22 @@
 package supahsoftware.toolbarsearchview
 
 import android.annotation.SuppressLint
-import android.content.Context
-import android.support.v7.app.ActionBar
+import android.support.annotation.ColorRes
+import android.support.v4.content.ContextCompat
+import android.support.v7.app.AppCompatActivity
+import android.support.v7.widget.Toolbar
 import android.text.Editable
 import android.text.TextWatcher
-import android.view.KeyEvent
-import android.view.LayoutInflater
-import android.view.View
-import android.view.ViewAnimationUtils
+import android.view.*
 import android.widget.RelativeLayout
 import kotlinx.android.synthetic.main.view_toolbar_search.view.*
 
 @SuppressLint("ViewConstructor")
-class ToolbarSearchView(context: Context, actionBar: ActionBar?, actionBarTitle: String) : RelativeLayout(context), ToolbarSearchViewPresenter.View {
+class ToolbarSearchView(
+        activity: AppCompatActivity,
+        activityLayout: ViewGroup,
+        actionBarTitle: String
+) : RelativeLayout(activity), ToolbarSearchViewPresenter.View {
 
     private var onEventListener: OnEventListener? = null
     private var searchText: String
@@ -26,6 +29,17 @@ class ToolbarSearchView(context: Context, actionBar: ActionBar?, actionBarTitle:
         LayoutInflater.from(context).inflate(R.layout.view_toolbar_search, this)
 
         presenter.attachView(this)
+
+        val toolbar = Toolbar(activity)
+        toolbar.setContentInsetsRelative(0, 0)
+
+        val layoutParams = ViewGroup.LayoutParams(ViewGroup.LayoutParams.MATCH_PARENT, 56.asDp())
+        toolbar.layoutParams = layoutParams
+        toolbar.setBackgroundColor(ContextCompat.getColor(activity, R.color.colorPrimary))
+        toolbar.elevation = 6f
+
+        activityLayout.addView(toolbar)
+        activity.setSupportActionBar(toolbar)
 
         open_search_button.setOnClickListener { presenter.openSearchClicked() }
         close_search_button.setOnClickListener { presenter.closeSearchClicked() }
@@ -41,7 +55,7 @@ class ToolbarSearchView(context: Context, actionBar: ActionBar?, actionBarTitle:
         user_search_screen.setOnKeyListener(this::onBackListener)
 
         toolbar_title.text = actionBarTitle
-        actionBar?.apply {
+        activity.supportActionBar?.apply {
             setDisplayShowTitleEnabled(false)
             setDisplayShowCustomEnabled(true)
             customView = this@ToolbarSearchView
@@ -58,15 +72,32 @@ class ToolbarSearchView(context: Context, actionBar: ActionBar?, actionBarTitle:
         presenter.detachView()
     }
 
+    fun setOnEventListener(listener: OnEventListener) {
+        onEventListener = listener
+    }
+
+    fun setPrimaryColor(@ColorRes colorId: Int) {
+        val color = ContextCompat.getColor(context, colorId)
+        closed_search_container.setBackgroundColor(color)
+        close_search_button.setColorFilter(color)
+        execute_search_button.setColorFilter(color)
+        search_edit_text.setTextColor(color)
+        search_edit_text.setHintTextColor(color)
+        open_search_button.setBackgroundColor(color)
+    }
+
+    fun setSecondaryColor(@ColorRes colorId: Int) {
+        val color = ContextCompat.getColor(context, colorId)
+        opened_search_container.setBackgroundColor(color)
+        toolbar_title.setTextColor(color)
+        open_search_button.setColorFilter(color)
+    }
+
     private fun onBackListener(view: View, keyCode: Int, event: KeyEvent): Boolean {
         return if (event.action == KeyEvent.ACTION_DOWN && keyCode == KeyEvent.KEYCODE_BACK) {
             presenter.closeSearchClicked()
             true
         } else false
-    }
-
-    fun setOnEventListener(listener: OnEventListener) {
-        onEventListener = listener
     }
 
     override fun focusEditText() {

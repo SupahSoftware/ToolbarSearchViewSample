@@ -1,0 +1,7 @@
+<resources>
+    <string name="app_name">ToolbarSearchView</string>
+    <string name="search_hint">Search …</string>
+    <string name="open_search_description">Open search</string>
+    <string name="execute_search_description">Execute search</string>
+    <string name="close_search_description">Close search</string>
+</resources>

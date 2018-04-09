@@ -2,24 +2,6 @@ apply plugin: 'com.android.library'
 apply plugin: 'kotlin-android'
 apply plugin: 'kotlin-android-extensions'
 
-ext {
-    bintrayRepo = 'Supah-Software-Android-Libraries'
-    bintrayName = 'ToolbarSearchView'
-    publishedGroupId = 'supahsoftware.toolbarsearchview'
-    libraryName = 'ToolbarSearchView'
-    artifact = 'toolbarsearchview'
-    libraryDescription = 'Test'
-    siteUrl = 'https://github.com/CreativeCodersJosh/ToolbarSearchViewSample'
-    gitUrl = 'https://github.com/CreativeCodersJosh/ToolbarSearchViewSample.git'
-    libraryVersion = '1.0'
-    developerId = 'supahsoftware'
-    developerName = 'Joshua Beckwith'
-    developerEmail = 'supahsoftware@gmail.com'
-    licenseName = 'The Apache Software License, Version 2.0'
-    licenseUrl = 'http://www.apache.org/licenses/LICENSE-2.0.txt'
-    allLicenses = ["Apache-2.0"]
-}
-
 android {
     compileSdkVersion 27
 
@@ -52,12 +34,5 @@ dependencies {
     androidTestImplementation 'com.android.support.test:runner:1.0.1'
     androidTestImplementation 'com.android.support.test.espresso:espresso-core:3.0.1'
 
-    implementation "org.jetbrains.kotlin:kotlin-stdlib-jdk7:$kotlin_version"
+    implementation "org.jetbrains.kotlin:kotlin-stdlib:$kotlin_version"
 }
-
-allprojects {
-    tasks.withType(Javadoc).all { enabled = false }
-}
-
-apply from: 'https://raw.githubusercontent.com/numetriclabz/jcenter/master/installv.gradle'
-apply from: 'https://raw.githubusercontent.com/numetriclabz/jcenter/master/bintrayv.gradle'
